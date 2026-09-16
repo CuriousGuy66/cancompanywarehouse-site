@@ -1,0 +1,50 @@
+[build]
+  publish = "."
+
+# Reserved paths. In October these become real pages at /meetings/, /events/
+# and /production/ — delete the matching redirect when the page is built.
+[[redirects]]
+  from = "/meetings"
+  to = "/#meetings"
+  status = 302
+[[redirects]]
+  from = "/events"
+  to = "/#events"
+  status = 302
+[[redirects]]
+  from = "/production"
+  to = "/#production"
+  status = 302
+[[redirects]]
+  from = "/rooms"
+  to = "/rooms/star-view-room/"
+  status = 301
+[[redirects]]
+  from = "/star-view-room"
+  to = "/rooms/star-view-room/"
+  status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# The brochure restates the rate card. Keep it out of the index so it cannot
+# outrank /pricing/ for the money query, and so nobody lands on a 2.7MB
+# dead end with no navigation.
+[[headers]]
+  for = "/downloads/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
