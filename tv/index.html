@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Star View Room — Welcome</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/css/fonts/archivo-narrow-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/site.css">
+<style>
+html,body{height:100%;margin:0;overflow:hidden;background:#E9E4D9}
+.tv{display:grid;grid-template-columns:52fr 48fr;height:100vh;width:100vw}
+.tv__photo{background:#1d1c16 url(/tv/star-window.webp) center/cover no-repeat}
+.tv__panel{display:flex;flex-direction:column;justify-content:center;padding:0 6vw;background:#E9E4D9;color:#4A491F}
+.tv__lock{display:flex;align-items:center;gap:2.4vw}
+.tv__lock svg{width:9vw;height:9vw;flex:none}
+.tv__lock svg .frame,.tv__lock svg .pane{fill:none;stroke:#4A491F;stroke-width:6}
+.tv__lock svg .star{fill:#C8372B}
+.tv__name{font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:4.6vw;line-height:1.02}
+.tv__room{margin:4.5vh 0 0;font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#C8372B;font-size:2.2vw}
+.tv__welcome{margin:1.2vh 0 0;font-family:var(--display);font-weight:700;font-size:3.4vw;color:#221F1A;line-height:1.1}
+.tv__rule{height:3px;background:#4A491F;opacity:.25;margin:5vh 0 3vh;width:100%}
+.tv__info{font-size:1.5vw;line-height:1.6;color:#221F1A}
+.tv__info b{color:#4A491F}
+</style>
+</head>
+<body>
+<div class="tv">
+  <div class="tv__photo" role="img" aria-label="The Mill Mountain Star seen through the room's south window"></div>
+  <div class="tv__panel">
+    <div class="tv__lock">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <rect class="frame" x="7" y="7" width="86" height="86"/>
+        <line class="pane" x1="50" y1="7" x2="50" y2="93"/>
+        <line class="pane" x1="7" y1="35.7" x2="93" y2="35.7"/>
+        <line class="pane" x1="7" y1="64.3" x2="93" y2="64.3"/>
+        <polygon class="star" points="28.5,12.4 30.7,18.37 37.06,18.62 32.07,22.56 33.79,28.68 28.5,25.15 23.21,28.68 24.93,22.56 19.94,18.62 26.3,18.37"/>
+      </svg>
+      <div class="tv__name">Can Company<br>Warehouse</div>
+    </div>
+    <p class="tv__room">Star View Room &middot; 2nd floor</p>
+    <p class="tv__welcome">Welcome.</p>
+    <div class="tv__rule"></div>
+    <div class="tv__info">
+      315 Albemarle Ave SE, Roanoke<br>
+      <b>cancompanywarehouse.com</b> &middot; <b>(540) 613-1035</b>
+    </div>
+  </div>
+</div>
+</body>
+</html>
