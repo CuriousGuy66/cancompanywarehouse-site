@@ -399,5 +399,5 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,summary:focus-visible{
 .planfig figcaption{font-size:.86rem;line-height:1.5;opacity:.78;margin-top:.5rem}
 
 /* consent checkbox */
-.field .check{display:flex;gap:.55rem;align-items:flex-start;font-weight:400;cursor:pointer}
+.field .check{display:flex;gap:.55rem;align-items:flex-start;cursor:pointer;font-family:var(--body);font-weight:400;text-transform:none;letter-spacing:0;font-size:.95rem;color:var(--ink)}
 .field .check input{width:auto;margin-top:.25rem;flex:none;accent-color:var(--olive,#4A491F)}
