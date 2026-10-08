@@ -49,7 +49,7 @@
 
   var use = q.get('use');
   var sel = form.querySelector('select[name="booking_type"]');
-  var map = { meeting: 'Meeting', event: 'Event, reception or party, Star', dock: 'Event, reception or party, Loading', production: 'Video or production, Star', loft: 'Video or production, South', tour: 'Tour' };
+  var map = { meeting: 'Meeting', event: 'Event, reception or party, Star', dock: 'Event, reception or party, Can', production: 'Video or production, Star', loft: 'Video or production, South', tour: 'Tour' };
   if (use && sel && map[use]) {
     for (var i = 0; i < sel.options.length; i++) {
       if (sel.options[i].value.indexOf(map[use]) === 0) { sel.selectedIndex = i; break; }
