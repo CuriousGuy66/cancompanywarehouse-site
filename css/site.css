@@ -401,3 +401,7 @@ a:focus-visible,.btn:focus-visible,button:focus-visible,summary:focus-visible{
 /* consent checkbox */
 .field .check{display:flex;gap:.55rem;align-items:flex-start;cursor:pointer;font-family:var(--body);font-weight:400;text-transform:none;letter-spacing:0;font-size:.95rem;color:var(--ink)}
 .field .check input{width:auto;margin-top:.25rem;flex:none;accent-color:var(--olive,#4A491F)}
+
+/* links inside dark bands must not match the background (fix 7 Oct) */
+.notice a,.section--dark a:not(.btn){color:#F4EFE3;text-decoration:underline;text-underline-offset:2px}
+.notice a:hover,.section--dark a:not(.btn):hover{color:#fff}

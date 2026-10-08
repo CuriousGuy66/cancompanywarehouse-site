@@ -29,9 +29,27 @@
     hidden.value = Object.keys(a).map(function (k) { return k + '=' + a[k]; }).join(' | ');
   }
 
+  // Subject line for the Netlify notification, e.g. "Tour only, Jennifer Hayward, October".
+  // Hours is disabled (so it is not sent) when the enquiry is only for a tour.
+  var subj = form.querySelector('input[name="subject"]');
+  var hrs = form.querySelector('input[name="hours"]');
+  var bt = form.querySelector('select[name="booking_type"]');
+  function syncHours() { if (hrs && bt) hrs.disabled = (bt.value === 'Tour only'); }
+  if (bt) bt.addEventListener('change', syncHours);
+  form.addEventListener('submit', function () {
+    syncHours();
+    if (!subj) return;
+    var parts = [];
+    ['booking_type', 'name', 'preferred_date'].forEach(function (n) {
+      var el = form.querySelector('[name="' + n + '"]');
+      if (el && el.value.trim()) parts.push(el.value.trim().slice(0, 60));
+    });
+    if (parts.length) subj.value = parts.join(', ');
+  });
+
   var use = q.get('use');
   var sel = form.querySelector('select[name="booking_type"]');
-  var map = { meeting: 'Meeting', event: 'Event', production: 'Video', tour: 'Tour' };
+  var map = { meeting: 'Meeting', event: 'Event', production: 'Video or production, Star', loft: 'Video or production, South', tour: 'Tour' };
   if (use && sel && map[use]) {
     for (var i = 0; i < sel.options.length; i++) {
       if (sel.options[i].value.indexOf(map[use]) === 0) { sel.selectedIndex = i; break; }
