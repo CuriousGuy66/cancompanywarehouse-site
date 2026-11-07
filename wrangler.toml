@@ -1,0 +1,13 @@
+# Cloudflare Pages config. Netlify ignores this file.
+name = "cancompanywarehouse-site"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cancompany-enquiries"
+database_id = "0f26d700-e18a-4877-bc80-6eabc225e7e2"
+
+[vars]
+NOTIFY_TO = "neal.brenner@cancompanywarehouse.com"
+NOTIFY_FROM = "enquiries@cancompanywarehouse.com"

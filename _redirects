@@ -1,0 +1,8 @@
+# Carried over from netlify.toml (Cloudflare Pages reads this file).
+/meetings        /#meetings              302
+/events          /#events                302
+/production      /#production            302
+/rooms           /rooms/star-view-room/  301
+/star-view-room  /rooms/star-view-room/  301
+/360             /tour/                  301
+/virtual-tour    /tour/                  301

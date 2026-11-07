@@ -1,0 +1,17 @@
+# Carried over from netlify.toml (Cloudflare Pages reads this file).
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/tour/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/*
+  Cache-Control: public, max-age=604800
+
+/downloads/*
+  X-Robots-Tag: noindex
