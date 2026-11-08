@@ -3,6 +3,11 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const p = url.pathname;
+  // One address for the site: send www to the bare domain (Netlify used to do this).
+  if (url.hostname === 'www.cancompanywarehouse.com') {
+    url.hostname = 'cancompanywarehouse.com';
+    return Response.redirect(url.toString(), 301);
+  }
   if (p.startsWith('/functions/') || p === '/wrangler.toml' || p === '/netlify.toml') {
     return new Response('Not found', { status: 404 });
   }
