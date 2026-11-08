@@ -54,7 +54,7 @@ export async function onRequestPost({ request, env }) {
           to: env.NOTIFY_TO,
           from: env.NOTIFY_FROM,
           subject, text, html,
-          headers: { 'Reply-To': d.email },
+          replyTo: d.email,
         }),
       });
       const j = await resp.json().catch(() => ({}));
