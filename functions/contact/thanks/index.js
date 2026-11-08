@@ -21,16 +21,31 @@ export async function onRequestPost({ request, env }) {
   if (!d.name || !d.email || !d.email.includes('@')) return Response.redirect(thanks, 303);
   d.sms_consent = d.sms_consent ? 'Yes' : 'No';
   const isTest = /\[TEST\]/i.test(d.message) ? 1 : 0;
+  // Cloudflare Turnstile spam check. Only enforced once TURNSTILE_SECRET_KEY is set.
+  // A failed check is still saved (spam=1) but not emailed, so a real lead is never lost.
+  let spam = 0, spamWhy = '';
+  if (env.TURNSTILE_SECRET_KEY) {
+    try {
+      const v = new FormData();
+      v.append('secret', env.TURNSTILE_SECRET_KEY);
+      v.append('response', clip(form.get('cf-turnstile-response'), 4096));
+      const ip = request.headers.get('CF-Connecting-IP');
+      if (ip) v.append('remoteip', ip);
+      const vr = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: v });
+      const vj = await vr.json().catch(() => ({}));
+      if (!vj.success) { spam = 1; spamWhy = 'turnstile: ' + clip((vj['error-codes'] || []).join(','), 200); }
+    } catch (e) { spamWhy = 'turnstile check error (let through): ' + clip(e && e.message, 200); }
+  }
   const subject = (isTest ? '[TEST] ' : '') + 'Website enquiry: ' + (d.subject && d.subject !== 'Can Company Warehouse enquiry' ? d.subject : d.name);
 
   let id = null;
   try {
     const r = await env.DB.prepare(
-      `INSERT INTO enquiries (name,email,phone,sms_consent,booking_type,preferred_date,hours,headcount,message,attribution,subject,ip_country,user_agent,is_test)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+      `INSERT INTO enquiries (name,email,phone,sms_consent,booking_type,preferred_date,hours,headcount,message,attribution,subject,ip_country,user_agent,is_test,spam)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
     ).bind(d.name, d.email, d.phone, d.sms_consent, d.booking_type, d.preferred_date, d.hours,
       d.headcount, d.message, d.attribution, subject, clip(request.cf && request.cf.country, 8),
-      clip(request.headers.get('user-agent'), 300), isTest).run();
+      clip(request.headers.get('user-agent'), 300), isTest, spam).run();
     id = r.meta && r.meta.last_row_id;
   } catch (e) { console.log('db insert failed', e && e.message); }
 
@@ -45,7 +60,9 @@ export async function onRequestPost({ request, env }) {
     `</table><p>Saved as enquiry #${esc(id ?? '?')}. Reply to this email to answer ${esc(d.name)} directly.</p>`;
 
   let emailed = 0, err = '';
-  if (env.EMAIL_API_TOKEN && env.CF_ACCOUNT_ID) {
+  if (spam) {
+    err = spamWhy;
+  } else if (env.EMAIL_API_TOKEN && env.CF_ACCOUNT_ID) {
     try {
       const resp = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/email/sending/send`, {
         method: 'POST',
@@ -64,6 +81,7 @@ export async function onRequestPost({ request, env }) {
   } else {
     err = 'email token not configured yet';
   }
+  if (!spam && spamWhy) err = (err ? err + ' | ' : '') + spamWhy;
   if (id != null) {
     try { await env.DB.prepare('UPDATE enquiries SET emailed=?, email_error=? WHERE id=?').bind(emailed, err, id).run(); } catch {}
   }
