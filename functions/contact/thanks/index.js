@@ -45,18 +45,24 @@ export async function onRequestPost({ request, env }) {
     `</table><p>Saved as enquiry #${esc(id ?? '?')}. Reply to this email to answer ${esc(d.name)} directly.</p>`;
 
   let emailed = 0, err = '';
-  if (env.EMAIL && typeof env.EMAIL.send === 'function') {
+  if (env.EMAIL_API_TOKEN && env.CF_ACCOUNT_ID) {
     try {
-      await env.EMAIL.send({
-        to: env.NOTIFY_TO,
-        from: { email: env.NOTIFY_FROM, name: 'Can Company Website' },
-        replyTo: d.email,
-        subject, text, html,
+      const resp = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/email/sending/send`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${env.EMAIL_API_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: env.NOTIFY_TO,
+          from: env.NOTIFY_FROM,
+          subject, text, html,
+          headers: { 'Reply-To': d.email },
+        }),
       });
-      emailed = 1;
-    } catch (e) { err = clip(e && (e.code || e.message), 300); }
+      const j = await resp.json().catch(() => ({}));
+      if (resp.ok && j.success !== false) emailed = 1;
+      else err = clip(JSON.stringify(j.errors || j).slice(0, 300), 300) || `HTTP ${resp.status}`;
+    } catch (e) { err = clip(e && e.message, 300); }
   } else {
-    err = 'email binding not configured yet';
+    err = 'email token not configured yet';
   }
   if (id != null) {
     try { await env.DB.prepare('UPDATE enquiries SET emailed=?, email_error=? WHERE id=?').bind(emailed, err, id).run(); } catch {}

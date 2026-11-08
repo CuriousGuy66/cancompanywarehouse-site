@@ -10,4 +10,6 @@ database_id = "0f26d700-e18a-4877-bc80-6eabc225e7e2"
 
 [vars]
 NOTIFY_TO = "neal.brenner@cancompanywarehouse.com"
-NOTIFY_FROM = "enquiries@cancompanywarehouse.com"
+NOTIFY_FROM = "neal.brenner@cancompanywarehouse.com"
+CF_ACCOUNT_ID = "24ae53248384940ad9d44c8684be92f8"
+# EMAIL_API_TOKEN is a secret set in the Pages dashboard (Email Sending: Edit). Swap NOTIFY_FROM to bookings@ once that alias exists.
